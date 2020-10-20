@@ -47,12 +47,6 @@ typedef std::unordered_map<std::string, int64_t> WordMap;
 auto count_order_desc = [](const WordCount &w1, const WordCount &w2) { return w2.count < w1.count; };
 
 WordMap count_word_files(std::filesystem::directory_entry e) {
-    UErrorCode status = U_ZERO_ERROR;
-    icu::RegexMatcher u_word_regex("([a-z]{2,})", UREGEX_CASE_INSENSITIVE, status);
-    if(U_FAILURE(status)) {
-        std::cout << "Regex creation failed.\n";
-        std::abort();
-    }
     WordMap file_word_counts;
     if(!e.is_regular_file()) {
       return file_word_counts;
@@ -60,6 +54,12 @@ WordMap count_word_files(std::filesystem::directory_entry e) {
     std::ifstream input_file(e.path());
     if(input_file.fail()) {
         return file_word_counts;
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    icu::RegexMatcher u_word_regex("([a-z]{2,})", UREGEX_CASE_INSENSITIVE, status);
+    if(U_FAILURE(status)) {
+        std::cout << "Regex creation failed.\n";
+        std::abort();
     }
 
     for (std::string line; std::getline(input_file, line); ) {
