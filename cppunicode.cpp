@@ -113,7 +113,7 @@ int count_words() {
     std::vector<WordCount> word_array;
     word_array.reserve(word_counts.size());
     for(const auto &[word, count]: word_counts) {
-        word_array.emplace_back({word, count});
+        word_array.emplace_back(WordCount{word, count});
     }
 
     const auto final_size = std::min(10, (int)word_array.size());
